@@ -40,7 +40,7 @@ import com.tolstoy.aiaiai.api.IClassifierBuilder;
 import com.tolstoy.aiaiai.api.IClassifierParams;
 import com.tolstoy.aiaiai.api.AttributeNotSetException;
 
-public class ClassifierBuilder<V> implements IClassifierBuilder<V> {
+class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 	private static final Logger logger = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
 
 	private final Classifier classifier;
@@ -48,13 +48,13 @@ public class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 	private final List<String> classAttributeOptions;
 	private final Attribute classAttribute;
 
-	public ClassifierBuilder( String classifierName, List<String> classifierArguments, String filterName, List<String> filterArguments, File inputFile ) throws Exception {
+	ClassifierBuilder( String classifierName, List<String> classifierArguments, String filterName, List<String> filterArguments, File inputFile ) throws Exception {
 		String args[];
 
 		args = classifierArguments != null ? classifierArguments.toArray( new String[ 0 ] ) : null;
 		this.classifier = AbstractClassifier.forName( classifierName, args );
 
-		args = classifierArguments != null ? classifierArguments.toArray( new String[ 0 ] ) : null;
+		args = filterArguments != null ? filterArguments.toArray( new String[ 0 ] ) : null;
 		Filter filter = (Filter) Class.forName( filterName ).getDeclaredConstructor().newInstance();
 		if ( args != null && ( filter instanceof OptionHandler ) ) {
 			( (OptionHandler) filter ).setOptions( args );
@@ -88,7 +88,7 @@ public class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 		for ( Attribute attr : valueAttributes ) {
 			attrs.add( attr.index(), new Attribute( attr.name() ) );
 		}
-		
+
 		attrs.add( classAttribute.index(), new Attribute( classAttribute.name(), classAttributeOptions ) );
 
 		Instances instances = new Instances( "whatever", (ArrayList<Attribute>) attrs, 0 );
@@ -112,6 +112,7 @@ public class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 		instances.setClassIndex( classAttribute.index() );
 
 		double rawPrediction = classifier.classifyInstance( instance );
+
 		String prediction = instances.classAttribute().value( (int) rawPrediction );
 
 		return prediction;

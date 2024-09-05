@@ -14,11 +14,9 @@
 
 package com.tolstoy.aiaiai.api;
 
-import java.io.File;
 import java.util.List;
-import java.util.Map;
 
-public interface IClassifierBuilderFactory {
-	IClassifierBuilder createClassifierBuilder( String classifierName, List<String> classifierArguments, String filterName, List<String> filterArguments, File inputFile ) throws Exception;
-	IConfidenceMatrix createConfidenceMatrix( Map<String,Integer> classCounts );
+public interface IConfidenceMatrix {
+	void addPrediction( String expected, String actual );
+	List<String> getResults();
 }

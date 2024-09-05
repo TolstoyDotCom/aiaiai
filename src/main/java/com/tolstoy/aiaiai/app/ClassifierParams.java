@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 import com.tolstoy.aiaiai.api.IClassifierParams;
 import com.tolstoy.aiaiai.api.AttributeNotSetException;
 
-public class ClassifierParams<V> implements IClassifierParams<V> {
+class ClassifierParams<V> implements IClassifierParams<V> {
 	private static final Logger logger = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
 
 	private final List<Attribute> valueAttributes;
@@ -35,7 +35,7 @@ public class ClassifierParams<V> implements IClassifierParams<V> {
 	private final Map<String,V> map;
 	private final int maxValueAttributeIndex;
 
-	public ClassifierParams( Attribute classAttribute, List<Attribute> valueAttributes ) {
+	ClassifierParams( Attribute classAttribute, List<Attribute> valueAttributes ) {
 		this.classAttribute = classAttribute;
 		this.valueAttributes = valueAttributes;
 		this.map = new HashMap<String,V>();
