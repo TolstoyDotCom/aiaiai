@@ -21,3 +21,8 @@ params.setValue( "my_third_attribute", 3.3 );
 
 String prediction = builder.classify( params );
 ```
+
+This includes an example that uses the iris dataset. To run it, download the library and run this:
+
+`mvn clean compile exec:java
+
