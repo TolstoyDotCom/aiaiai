@@ -1,6 +1,6 @@
 # AIAIAI!
 
-AIAIAI! is a small library that might make dealing with Weka from Java easier.
+AIAIAI! is a small artificial intelligence (AI) library that might make dealing with Weka from Java easier.
 
 Currently it assumes that the class attribute is a string and the other attributes are doubles. See iris.arff in the resources directory for such a setup.
 
