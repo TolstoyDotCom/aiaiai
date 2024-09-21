@@ -44,6 +44,7 @@ class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 	private static final Logger logger = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
 
 	private final Classifier classifier;
+	private final Filter filter;
 	private final List<Attribute> valueAttributes;
 	private final List<String> classAttributeOptions;
 	private final Attribute classAttribute;
@@ -55,9 +56,9 @@ class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 		this.classifier = AbstractClassifier.forName( classifierName, args );
 
 		args = filterArguments != null ? filterArguments.toArray( new String[ 0 ] ) : null;
-		Filter filter = (Filter) Class.forName( filterName ).getDeclaredConstructor().newInstance();
-		if ( args != null && ( filter instanceof OptionHandler ) ) {
-			( (OptionHandler) filter ).setOptions( args );
+		this.filter = (Filter) Class.forName( filterName ).getDeclaredConstructor().newInstance();
+		if ( args != null && ( this.filter instanceof OptionHandler ) ) {
+			( (OptionHandler) this.filter ).setOptions( args );
 		}
 
 		Instances rawInstances = new Instances( new BufferedReader( new FileReader( inputFile ) ) );
@@ -70,9 +71,9 @@ class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 
 		rawInstances.setClassIndex( this.classAttribute.index() );
 
-		filter.setInputFormat( rawInstances );
+		this.filter.setInputFormat( rawInstances );
 
-		Instances filteredInstances = Filter.useFilter( rawInstances, filter );
+		Instances filteredInstances = Filter.useFilter( rawInstances, this.filter );
 
 		this.classifier.buildClassifier( filteredInstances );
 	}
@@ -111,7 +112,9 @@ class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 		instance.setDataset( instances );
 		instances.setClassIndex( classAttribute.index() );
 
-		double rawPrediction = classifier.classifyInstance( instance );
+		Instances filteredInstances = Filter.useFilter( instances, filter );
+
+		double rawPrediction = classifier.classifyInstance( filteredInstances.get( 0 ) );
 
 		String prediction = instances.classAttribute().value( (int) rawPrediction );
 
