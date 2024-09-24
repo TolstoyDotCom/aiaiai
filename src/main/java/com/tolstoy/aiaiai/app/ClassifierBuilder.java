@@ -48,6 +48,7 @@ class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 	private final List<Attribute> valueAttributes;
 	private final List<String> classAttributeOptions;
 	private final Attribute classAttribute;
+	private final int maxAttributeIndex;
 
 	ClassifierBuilder( String classifierName, List<String> classifierArguments, String filterName, List<String> filterArguments, File inputFile ) throws Exception {
 		String args[];
@@ -76,6 +77,13 @@ class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 		Instances filteredInstances = Filter.useFilter( rawInstances, this.filter );
 
 		this.classifier.buildClassifier( filteredInstances );
+
+		int tempMax = classAttribute.index();
+		for ( Attribute attr : valueAttributes ) {
+			tempMax = Math.max( tempMax, attr.index() );
+		}
+
+		this.maxAttributeIndex = tempMax;
 	}
 
 	public IClassifierParams createClassifierParams() {
@@ -85,12 +93,16 @@ class ClassifierBuilder<V> implements IClassifierBuilder<V> {
 	public String classify( IClassifierParams<V> params ) throws Exception {
 		List<V> values = params.getList();
 
-		List<Attribute> attrs = new ArrayList<Attribute>( values.size() + 1 );
-		for ( Attribute attr : valueAttributes ) {
-			attrs.add( attr.index(), new Attribute( attr.name() ) );
+		List<Attribute> attrs = new ArrayList<Attribute>( maxAttributeIndex );
+		for ( int i = 0; i <= maxAttributeIndex; i++ ) {
+			attrs.add( i, null );
 		}
 
-		attrs.add( classAttribute.index(), new Attribute( classAttribute.name(), classAttributeOptions ) );
+		for ( Attribute attr : valueAttributes ) {
+			attrs.set( attr.index(), new Attribute( attr.name() ) );
+		}
+
+		attrs.set( classAttribute.index(), new Attribute( classAttribute.name(), classAttributeOptions ) );
 
 		Instances instances = new Instances( "whatever", (ArrayList<Attribute>) attrs, 0 );
 

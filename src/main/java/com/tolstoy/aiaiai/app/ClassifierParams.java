@@ -96,4 +96,9 @@ class ClassifierParams<V> implements IClassifierParams<V> {
 
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return "class=" + classAttribute + ", values=" + valueAttributes + ", map=" + map + ", maxValueAttributeIndex=" + maxValueAttributeIndex;
+	}
 }
