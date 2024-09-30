@@ -15,8 +15,11 @@
 package com.tolstoy.aiaiai.api;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IConfidenceMatrix {
 	void addPrediction( String expected, String actual );
 	List<String> getResults();
+	Map<String,Integer> getClassCounts();
+	Map<String,Integer> getMatrix();
 }

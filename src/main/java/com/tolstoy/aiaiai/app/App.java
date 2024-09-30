@@ -79,6 +79,7 @@ public class App {
 			countNumCorrectByClass( builder, params, keyedInstances, confidenceMatrix );
 
 			logger.info( "RESULTS:\n\t" + StringUtils.join( confidenceMatrix.getResults(), "\n\t" ) );
+			logger.info( "classes=" + confidenceMatrix.getClassCounts() + ", matrix=" + confidenceMatrix.getMatrix() ); 
 		}
 		catch ( Exception e ) {
 			logger.catching( e );

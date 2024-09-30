@@ -66,6 +66,14 @@ class ConfidenceMatrix implements IConfidenceMatrix {
 		return ret;
 	}
 
+	public Map<String,Integer> getClassCounts() {
+		return new HashMap<String,Integer>( classCounts );
+	}
+
+	public Map<String,Integer> getMatrix() {
+		return new HashMap<String,Integer>( matrix );
+	}
+
 	protected String createKey( String expected, String actual ) {
 		return expected + ",,,,," + actual;
 	}
